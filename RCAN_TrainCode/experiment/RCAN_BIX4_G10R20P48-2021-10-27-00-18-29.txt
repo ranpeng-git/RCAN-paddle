@@ -1,0 +1,23 @@
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/backend_bases.py:55: DeprecationWarning: PILLOW_VERSION is deprecated and will be removed in a future release. Use __version__ instead.
+  from PIL import PILLOW_VERSION
+/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/srdata.py:35: DeprecationWarning: `imread` is deprecated!
+`imread` is deprecated in SciPy 1.0.0, and will be removed in 1.2.0.
+Use ``imageio.imread`` instead.
+  hr = misc.imread(v)
+Preparing seperated binary files
+Traceback (most recent call last):
+  File "main.py", line 14, in <module>
+    loader = data.Data(args)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/__init__.py", line 19, in __init__
+    trainset = getattr(module_train, args.data_train)(args)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/div2k.py", line 14, in __init__
+    super(DIV2K, self).__init__(args, train)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/srdata.py", line 35, in __init__
+    hr = misc.imread(v)
+  File "/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/numpy/lib/utils.py", line 101, in newfunc
+    return func(*args, **kwds)
+  File "/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/scipy/misc/pilutil.py", line 164, in imread
+    im = Image.open(name)
+  File "/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/PIL/Image.py", line 2878, in open
+    fp = builtins.open(filename, "rb")
+FileNotFoundError: [Errno 2] No such file or directory: '/home/yulun/data/SR/traindata/DIV2K/bicubic/DIV2K/DIV2K_train_HR/0001.png'

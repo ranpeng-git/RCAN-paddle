@@ -1,0 +1,24 @@
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/__init__.py:107: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import MutableMapping
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/rcsetup.py:20: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Iterable, Mapping
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/colors.py:53: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
+  from collections import Sized
+Traceback (most recent call last):
+  File "main.py", line 14, in <module>
+    loader = data.Data(args)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/__init__.py", line 18, in __init__
+    module_train = import_module('data.' + args.data_train.lower())
+  File "/opt/conda/envs/python35-paddle120-env/lib/python3.7/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1006, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 983, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 967, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/div2k.py", line 3, in <module>
+    from data import common
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/common.py", line 4, in <module>
+    import skimage.io as sio
+ModuleNotFoundError: No module named 'skimage'

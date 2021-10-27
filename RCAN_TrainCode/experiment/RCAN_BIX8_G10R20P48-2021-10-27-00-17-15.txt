@@ -1,0 +1,13 @@
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/backend_bases.py:55: DeprecationWarning: PILLOW_VERSION is deprecated and will be removed in a future release. Use __version__ instead.
+  from PIL import PILLOW_VERSION
+Preparing seperated binary files
+Traceback (most recent call last):
+  File "main.py", line 14, in <module>
+    loader = data.Data(args)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/__init__.py", line 19, in __init__
+    trainset = getattr(module_train, args.data_train)(args)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/div2k.py", line 14, in __init__
+    super(DIV2K, self).__init__(args, train)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/srdata.py", line 35, in __init__
+    hr = misc.imread(v)
+AttributeError: module 'scipy.misc' has no attribute 'imread'

@@ -1,0 +1,36 @@
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/matplotlib/backend_bases.py:55: DeprecationWarning: PILLOW_VERSION is deprecated and will be removed in a future release. Use __version__ instead.
+  from PIL import PILLOW_VERSION
+/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/srdata.py:35: DeprecationWarning: `imread` is deprecated!
+`imread` is deprecated in SciPy 1.0.0, and will be removed in 1.2.0.
+Use ``imageio.imread`` instead.
+  hr = misc.imread(v)
+/opt/conda/envs/python35-paddle120-env/lib/python3.7/site-packages/scipy/misc/pilutil.py:165: DeprecationWarning: `fromimage` is deprecated!
+`fromimage` is deprecated in SciPy 1.0.0. and will be removed in 1.2.0.
+Use ``np.asarray(im)`` instead.
+  return fromimage(im, flatten=flatten, mode=mode)
+/home/aistudio/RCAN-master/RCAN_TrainCode/code/data/srdata.py:40: DeprecationWarning: `imread` is deprecated!
+`imread` is deprecated in SciPy 1.0.0, and will be removed in 1.2.0.
+Use ``imageio.imread`` instead.
+  lr = misc.imread(v)
+Preparing seperated binary files
+Preparing seperated binary files
+Making model...
+Traceback (most recent call last):
+  File "main.py", line 15, in <module>
+    model = model.Model(args, checkpoint)
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/model/__init__.py", line 22, in __init__
+    module = import_module('model.' + args.model.lower())
+  File "/opt/conda/envs/python35-paddle120-env/lib/python3.7/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1006, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 983, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 967, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/model/rcan.py", line 1, in <module>
+    from model import common
+  File "/home/aistudio/RCAN-master/RCAN_TrainCode/code/model/common.py", line 18
+    self.bias.detach() = sign * rgb_range * paddle.Tensor(rgb_mean)
+    ^
+SyntaxError: can't assign to function call
