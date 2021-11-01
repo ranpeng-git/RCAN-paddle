@@ -55,6 +55,6 @@ class Data:
         # )
         self.loader_test = MSDataLoader(args , 
             testset, feed_list=None, places=None, return_list=False, batch_sampler=None,
-                 batch_size=1, shuffle=False, drop_last=False, collate_fn=None, num_workers=args.n_threads, 
-                 use_buffer_reader=True, use_shared_memory=True, timeout=0, worker_init_fn=None
+                 batch_size= 1 , shuffle=False, drop_last=False, collate_fn=None, num_workers=0, 
+                 use_buffer_reader=True, use_shared_memory=False, timeout=0, worker_init_fn=None
         )

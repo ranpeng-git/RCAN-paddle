@@ -63,23 +63,23 @@ class Model(nn.Layer):
         target = self.get_model()
         return target.state_dict(**kwargs)
 
-    def save(self, apath, epoch, is_best=False):
-        target = self.get_model()
-        paddle.save(
-            target.state_dict(), 
-            os.path.join(apath, 'model', 'model_latest.pdparams')
-        )
-        if is_best:
-            paddle.save(
-                target.state_dict(),
-                os.path.join(apath, 'model', 'model_best.pdparams')
-            )
+    # def save(self, apath, epoch, is_best=False):
+    #     target = self.get_model()
+    #     paddle.save(
+    #         target.state_dict(), 
+    #         os.path.join(apath, 'model', 'model_latest.pdparams')
+    #     )
+    #     if is_best:
+    #         paddle.save(
+    #             target.state_dict(),
+    #             os.path.join(apath, 'model', 'model_best.pdparams')
+    #         )
         
-        if self.save_models:
-            paddle.save(
-                target.state_dict(),
-                os.path.join(apath, 'model', 'model_{}.pdparams'.format(epoch))
-            )
+    #     if self.save_models:
+    #         paddle.save(
+    #             target.state_dict(),
+    #             os.path.join(apath, 'model', 'model_{}.pdparams'.format(epoch))
+    #         )
 
     def load(self, apath, pre_train='.', resume=-1, cpu=False):
         if cpu:
@@ -88,27 +88,24 @@ class Model(nn.Layer):
             kwargs = {}
 
         if resume == -1:
-            self.get_model().load_state_dict(
+            self.get_model().set_state_dict(
                 paddle.load(
                     os.path.join(apath, 'model', 'model_latest.pdparams'),
                     **kwargs
                 ),
-                strict=False
             )
         elif resume == 0:
             if pre_train != '.':
                 print('Loading model from {}'.format(pre_train))
-                self.get_model().load_state_dict(
+                self.get_model().set_state_dict(
                     paddle.load(pre_train, **kwargs),
-                    strict=False
                 )
         else:
-            self.get_model().load_state_dict(
+            self.get_model().set_state_dict(
                 paddle.load(
                     os.path.join(apath, 'model', 'model_{}.pdparams'.format(resume)),
                     **kwargs
-                ),
-                strict=False
+                )
             )
 
     def forward_chop(self, x, shave=10, min_size=160000):

@@ -4,6 +4,9 @@ import time
 import datetime
 from functools import reduce
 
+import imageio
+from PIL import Image #PIL pakage name is Pillow
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -42,7 +45,7 @@ class checkpoint():
     def __init__(self, args):
         self.args = args
         self.ok = True
-        self.log = paddle.Tensor()
+        self.log = paddle.to_tensor(np.zeros([1 , 1]) , dtype = 'float32')
         now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
 
         if args.load == '.':
@@ -123,15 +126,16 @@ class checkpoint():
         postfix = ('SR', 'LR', 'HR')
         for v, p in zip(save_list, postfix):
             normalized = v[0].detach()*(255 / self.args.rgb_range)
-            ndarr = normalized.byte().transpose(perm =[1, 2, 0]).cpu().numpy()
-            misc.imsave('{}{}.png'.format(filename, p), ndarr)
+            ndarr = paddle.cast(normalized.transpose(perm =[1, 2, 0]), 'uint8').cpu().numpy()
+            #misc.imsave('{}{}.png'.format(filename, p), ndarr)
+            imageio.imwrite('{}{}.png'.format(filename, p), ndarr)
 
 def quantize(img, rgb_range):
     pixel_range = 255 / rgb_range
-    return img*(pixel_range).clip(0,255).round().divide(pixel_range)
+    return (img*(pixel_range)).clip(0,255).round() /(pixel_range)
 
 def calc_psnr(sr, hr, scale, rgb_range, benchmark=False):
-    diff = (sr - hr).detach().divide(rgb_range)
+    diff = ((sr - hr).detach())/rgb_range
     shave = scale
     if diff.shape[1]> 1:
         # convert = diff.new(1, 3, 1, 1)
@@ -139,7 +143,7 @@ def calc_psnr(sr, hr, scale, rgb_range, benchmark=False):
         convert[0, 0, 0, 0] = 65.738
         convert[0, 1, 0, 0] = 129.057
         convert[0, 2, 0, 0] = 25.064
-        diff=(diff*convert).divide(256)
+        diff=(diff*convert)/256
         diff = diff.sum(axis=1, keepdim=True)
     '''
     if benchmark:

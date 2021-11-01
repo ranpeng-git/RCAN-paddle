@@ -54,7 +54,7 @@ class Loss(nn.Layer):
                 print('{:.3f} * {}'.format(l['weight'], l['type']))
                 self.loss_module.append(l['function'])
 
-        self.log = np.zeros([1 , len(self.loss)])
+        self.log = paddle.to_tensor(np.zeros([1 , len(self.loss)]) , dtype = 'float32')
 
         device = paddle.device.set_device('cpu' if args.cpu else 'gpu')
         # self.loss_module.to(device)
@@ -71,9 +71,10 @@ class Loss(nn.Layer):
         for i, l in enumerate(self.loss):
             if l['function'] is not None:
                 loss = l['function'](sr, hr)
+                # print('iter of  {} is {}'.format(i , loss.cpu().numpy()[0]))
                 effective_loss = l['weight'] * loss
                 losses.append(effective_loss)
-                self.log[-1, i] += effective_loss.cpu().numpy()[0]
+                self.log[-1, i] += effective_loss.item()
             elif l['type'] == 'DIS':
                 self.log[-1, i] += self.loss[i - 1]['function'].loss
 
@@ -90,17 +91,17 @@ class Loss(nn.Layer):
                 l.scheduler.step()
 
     def start_log(self):
-        self.log = np.concatenate([self.log, np.zeros([1, len(self.loss)])])
+        self.log = paddle.concat([self.log, paddle.zeros([1, len(self.loss)])])
 
     def end_log(self, n_batches):
-        self.log[-1] = self.log[-1].divide(n_batches)
+        self.log[-1] = self.log[-1] / n_batches
 
     def display_loss(self, batch):
         n_samples = batch + 1
         log = []
         for l, c in zip(self.loss, self.log[-1]):
-            # c = c.cpu().numpy()[0]
-            log.append('[{}: {:.4f}]'.format(l['type'], c / n_samples))
+            # print(c)
+            log.append('[{}: {:.4f}]'.format(l['type'], (c / n_samples).detach().numpy()[0] ))
 
         return ''.join(log)
 

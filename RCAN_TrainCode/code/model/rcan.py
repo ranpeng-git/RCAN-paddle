@@ -1,6 +1,7 @@
 from model import common
 
 import paddle.nn as nn
+import paddle
 
 def make_model(args, parent=False):
     return RCAN(args)
@@ -20,8 +21,11 @@ class CALayer(nn.Layer):
         )
 
     def forward(self, x):
+        # print(x.shape)
         y = self.avg_pool(x)
+        # print(y.shape)
         y = self.conv_du(y)
+        # print("sigmoid out is {}".format(y.cpu().numpy()[0]))
         return x * y
 
 ## Residual Channel Attention Block (RCAB)
@@ -44,6 +48,7 @@ class RCAB(nn.Layer):
         res = self.body(x)
         #res = self.body(x).mul(self.res_scale)
         res += x
+        # print('RCAB output is {}'.format(res.mean().cpu().numpy()[0]))
         return res
 
 ## Residual Group (RG)
@@ -52,15 +57,14 @@ class ResidualGroup(nn.Layer):
         super(ResidualGroup, self).__init__()
         modules_body = []
         modules_body = [
-            RCAB(
-                conv, n_feat, kernel_size, reduction, bias_attr=True, bn=False, act=nn.ReLU(), res_scale=1) \
-            for _ in range(n_resblocks)]
+            RCAB(conv, n_feat, kernel_size, reduction, bias_attr=True, bn=False, act=nn.ReLU(), res_scale=1) for _ in range(n_resblocks)]
         modules_body.append(conv(n_feat, n_feat, kernel_size))
         self.body = nn.Sequential(*modules_body)
 
-    def forward(self, x):
+    def forward(self, x): 
         res = self.body(x)
         res += x
+        # print('ResidualGroup output is {}'.format(res.mean().cpu().numpy()[0]))
         return res
 
 ## Residual Channel Attention Network (RCAN)
@@ -105,38 +109,43 @@ class RCAN(nn.Layer):
 
     def forward(self, x):
         x = self.sub_mean(x)
+
         x = self.head(x)
 
         res = self.body(x)
         res += x
-
+        
         x = self.tail(res)
         x = self.add_mean(x)
 
         return x 
 
-    def load_state_dict(self, state_dict, strict=False):
-        own_state = self.state_dict()
-        for name, param in state_dict.items():
-            if name in own_state:
-                if isinstance(param, nn.Parameter):
-                    param = param.data
-                try:
-                    own_state[name].copy_(param)
-                except Exception:
-                    if name.find('tail') >= 0:
-                        print('Replace pre-trained upsampler to new one...')
-                    else:
-                        raise RuntimeError('While copying the parameter named {}, '
-                                           'whose dimensions in the model are {} and '
-                                           'whose dimensions in the checkpoint are {}.'
-                                           .format(name, own_state[name].size(), param.size()))
-            elif strict:
-                if name.find('tail') == -1:
-                    raise KeyError('unexpected key "{}" in state_dict'
-                                   .format(name))
+    # def load_state_dict(self, state_dict, strict=False):
+    #     own_state = self.state_dict()
+    #     for name, param in state_dict.items():
+    #         if name in own_state:
+    #             if isinstance(param, paddle.Tensor):
+    #                 param = param.detach()
+    #             try:
+    #                 own_state[name] = paddle.create_parameter(shape = param.shape,
+    #                 dtype = str(param.numpy().dtype),
+    #                 default_initializer = paddle.nn.initializer.Assign(param) 
+    #                 )
+    #                 own_state[name].stop_gradients = True
+    #             except Exception:
+    #                 if name.find('tail') >= 0:
+    #                     print('Replace pre-trained upsampler to new one...')
+    #                 else:
+    #                     raise RuntimeError('While copying the parameter named {}, '
+    #                                        'whose dimensions in the model are {} and '
+    #                                        'whose dimensions in the checkpoint are {}.'
+    #                                        .format(name, own_state[name].shape, param.shape))
+    #         elif strict:
+    #             if name.find('tail') == -1:
+    #                 raise KeyError('unexpected key "{}" in state_dict'
+    #                                .format(name))
 
-        if strict:
-            missing = set(own_state.keys()) - set(state_dict.keys())
-            if len(missing) > 0:
-                raise KeyError('missing keys in state_dict: "{}"'.format(missing))
+    #     if strict:
+    #         missing = set(own_state.keys()) - set(state_dict.keys())
+    #         if len(missing) > 0:
+    #             raise KeyError('missing keys in state_dict: "{}"'.format(missing))

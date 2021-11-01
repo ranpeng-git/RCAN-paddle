@@ -7,7 +7,7 @@ import paddle.nn.functional as F
 def default_conv(in_channels, out_channels, kernel_size, bias_attr=True):
     return nn.Conv2D(
         in_channels, out_channels, kernel_size,
-        padding=(kernel_size//2), bias_attr=bias_attr)
+        padding=kernel_size//2, bias_attr=bias_attr)
 
 class MeanShift(nn.Conv2D):
     def __init__(self, rgb_range, rgb_mean, rgb_std, sign=-1):
@@ -19,10 +19,10 @@ class MeanShift(nn.Conv2D):
                         default_initializer=paddle.nn.initializer.Assign(weight))
         self.weight.stop_gradient = True
         # self.weight.divide(std.reshape([3, 1, 1, 1]))
-        bias_attr = sign * rgb_range * paddle.to_tensor(rgb_mean).detach().divide(std)
-        self.bias_attr = paddle.create_parameter(shape=bias_attr.shape,
-                        dtype=str(bias_attr.numpy().dtype),
-                        default_initializer=paddle.nn.initializer.Assign(bias_attr))
+        bias = sign * rgb_range * paddle.to_tensor(rgb_mean).detach().divide(std)
+        self.bias = paddle.create_parameter(shape=bias.shape,
+                        dtype=str(bias.numpy().dtype),
+                        default_initializer=paddle.nn.initializer.Assign(bias))
         self.bias.stop_gradient = True
         # self.bias.detach().divide(std)
         self.requires_grad = False
@@ -30,7 +30,7 @@ class MeanShift(nn.Conv2D):
 class BasicBlock(nn.Sequential):
     def __init__(
         self, in_channels, out_channels, kernel_size, stride=1, bias_attr=False,
-        bn=True, act=nn.ReLU(True)):
+        bn=True, act=nn.ReLU()):
 
         m = [nn.Conv2D(
             in_channels, out_channels, kernel_size,
@@ -43,7 +43,7 @@ class BasicBlock(nn.Sequential):
 class ResBlock(nn.Layer):
     def __init__(
         self, conv, n_feat, kernel_size,
-        bias_attr=True, bn=False, act=nn.ReLU(True), res_scale=1):
+        bias_attr=True, bn=False, act=nn.ReLU(), res_scale=1):
 
         super(ResBlock, self).__init__()
         m = []

@@ -31,7 +31,7 @@ class Trainer():
     def train(self):
         self.scheduler.step()
         self.loss.step()
-        epoch = self.scheduler.last_epoch + 1
+        epoch = self.scheduler.last_epoch
         lr = self.scheduler.get_lr()
 
         self.ckp.write_log(
@@ -41,24 +41,26 @@ class Trainer():
         self.model.train()
 
         timer_data, timer_model = utility.timer(), utility.timer()
-        for batch, (lr, hr ,_) in enumerate(self.loader_train):
-            # print(lr, hr,  idx_scale)
+        for batch, (lr, hr ,_ ,idx_scale) in enumerate(self.loader_train):
             lr, hr = self.prepare([lr, hr])
+            
             timer_data.hold()
             timer_model.tic()
 
             self.optimizer.clear_grad()
-            sr = self.model(lr, 0)
-            print((sr-hr).mean())
+            sr = self.model(lr, idx_scale)
 
             loss = self.loss(sr, hr)
+
             if loss.cpu().numpy()[0] < self.args.skip_threshold * self.error_last:
                 loss.backward()
                 self.optimizer.step()
-            # else:
-            #     print('Skip this batch {}! (Loss: {})'.format(
-            #         batch + 1, loss.cpu().numpy()[0]
-            #     ))
+            else:
+                print('Skip this batch {}! (Loss: {})'.format(
+                    batch + 1, loss.cpu().numpy()[0]
+                ))
+
+            # return loss
 
             timer_model.hold()
 
@@ -75,21 +77,26 @@ class Trainer():
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]
 
+        if epoch % 5  == 0 :
+            # self.model.save('save_model_mid/model_{}.pdparams'.format(epoch))
+            paddle.save(self.model.state_dict() ,'save_model_mid/model_{}.pdparams'.format(epoch+105) )
+
     def test(self):
-        epoch = self.scheduler.last_epoch + 1
+        epoch = self.scheduler.last_epoch
         self.ckp.write_log('\nEvaluation:')
         self.ckp.add_log(paddle.zeros([1, len(self.scale)]))
         self.model.eval()
 
         timer_test = utility.timer()
         with paddle.no_grad():
+            print(self.scale)
             for idx_scale, scale in enumerate(self.scale):
                 eval_acc = 0
                 self.loader_test.dataset.set_scale(idx_scale)
-                tqdm_test = tqdm(self.loader_test, ncols=80)
-                for idx_img, (lr, hr, filename, _) in enumerate(tqdm_test):
+                # tqdm_test = tqdm(self.loader_test, ncols=80)
+                for idx_img, (lr, hr, filename ) in enumerate(self.loader_test):
                     filename = filename[0]
-                    no_eval = (hr.nelement() == 1)
+                    no_eval = (hr.numel() == 1)
                     if not no_eval:
                         lr, hr = self.prepare([lr, hr])
                     else:
@@ -106,26 +113,37 @@ class Trainer():
                         )
                         save_list.extend([lr, hr])
 
+                        print(eval_acc)
+
+
                     if self.args.save_results:
                         self.ckp.save_results(filename, save_list, scale)
 
-                self.ckp.log[-1, idx_scale] = eval_acc / len(self.loader_test)
-                best = self.ckp.log.max(0)
-                self.ckp.write_log(
-                    '[{} x{}]\tPSNR: {:.3f} (Best: {:.3f} @epoch {})'.format(
-                        self.args.data_test,
-                        scale,
-                        self.ckp.log[-1, idx_scale],
-                        best[0][idx_scale],
-                        best[1][idx_scale] + 1
-                    )
-                )
+                # acc = eval_acc / len(self.loader_test)
+                # print(acc)
+                
+                # self.ckp.log[-1, idx_scale] = eval_acc / len(self.loader_test)
+                # best = self.ckp.log.max(0)
+                
+                # self.ckp.write_log(
+                #     '[{} x{}]\tPSNR: {:.3f} (Best: {:.3f} @epoch {})'.format(
+                #         self.args.data_test,
+                #         scale,
+                #         self.ckp.log[-1, idx_scale],
+                #         best[0][idx_scale],
+                #         best[0][idx_scale] + 1
+                #     )
+                # )
 
         self.ckp.write_log(
             'Total time: {:.2f}s\n'.format(timer_test.toc()), refresh=True
         )
-        if not self.args.test_only:
-            self.ckp.save(self, epoch, is_best=(best[1][0] + 1 == epoch))
+
+        # if not self.args.test_only:
+        #     self.ckp.save(self, epoch, is_best=(best[1][0] + 1 == epoch))
+        # if epoch % 5  == 0 :
+        #     # self.model.save('save_model_mid/model_{}.pdparams'.format(epoch))
+        #     paddle.save(self.model.state_dict() ,'save_model_mid/model_{}.pdparams'.format(epoch) )
 
     def prepare(self, l, volatile=False):
         device = paddle.device.set_device('cpu' if self.args.cpu else 'gpu')
