@@ -49,7 +49,7 @@ The architecture of our proposed residual channel attention network (RCAN).
 **You can use scripts in file 'TrainRCAN_scripts' to train models for our paper.**
 
 ```
-python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblocks 20 --n_feats 64  --reset --chop --save_results --patch_size 192 --pre_train model_init.pdparams  2>&1 | tee $LOG
+python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblocks 20 --n_feats 64  --reset --chop --save_results --patch_size 192 --pre_train model/model_init.pdparams  2>&1 | tee $LOG
 ```
 
 
@@ -65,7 +65,7 @@ python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblo
 ​    **You can use scripts in file 'TestRCAN_scripts' to produce results for our paper.**
 
 ```
-python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model_190.pdparams
+python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model/model_190.pdparams
 ```
 
 
