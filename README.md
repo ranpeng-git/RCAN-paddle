@@ -1,7 +1,3 @@
----
-typora-root-url: ./figs
----
-
 # Image Super-Resolution Using Very Deep Residual Channel Attention Networks
 
 This repository is paddle implements for RCAN introduced in the following paper
@@ -17,8 +13,6 @@ This repository is paddle implements for RCAN introduced in the following paper
 2. [Train](#train)
 3. [Test](#test)
 4. [Results](#results)
-5.  [Citation](#citation)
-6. [Acknowledgements](#acknowledgements)
 
 
 
@@ -26,11 +20,13 @@ This repository is paddle implements for RCAN introduced in the following paper
 
 Convolutional neural network (CNN) depth is of crucial importance for image super-resolution (SR). However, we observe that deeper networks for image SR are more difficult to train. The low-resolution inputs and features contain abundant low-frequency information, which is treated equally across channels, hence hindering the representational ability of CNNs. To solve these problems, we propose the very deep residual channel attention networks (RCAN). Specifically, we propose a residual in residual (RIR) structure to form very deep network, which consists of several residual groups with long skip connections. Each residual group contains some residual blocks with short skip connections. Meanwhile, RIR allows abundant low-frequency information to be bypassed through multiple skip connections, making the main network focus on learning high-frequency information. Furthermore, we propose a channel attention mechanism to adaptively rescale channel-wise features by considering interdependencies among channels. Extensive experiments show that our RCAN achieves better accuracy and visual improvements against state-of-the-art methods.
 
-![CA](/CA.PNG)
+<img src="figs/CA.PNG" width="900px" height="200px"/>
 
-![RCAB](/RCAB.PNG)
 
-![RCAN](/RCAN.PNG)
+
+<img src="figs/RCAB.PNG" width="900px" height="200px"/>
+
+<img src="figs/RCAN.PNG" width="900px" height="300px"/>
 
 The architecture of our proposed residual channel attention network (RCAN).
 
@@ -62,14 +58,14 @@ python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblo
 
 ### Quick start
 
-1. Download models of ours and place them in '/RCAN_TrainCode/model'.
+1. Download [models of ours with code: `wagn`](https://pan.baidu.com/s/17FgLv_fKR2x8Rpf2IXy41w)  and place them in '/RCAN_TrainCode/model'.
 
 2. Cd to '/RCAN_TrainCode/code', run the following scripts.
 
 ​    **You can use scripts in file 'TestRCAN_scripts' to produce results for our paper.**
 
 ```
-python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train 
+python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model_190.pdparams
 ```
 
 
@@ -91,7 +87,24 @@ python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_r
 |     method     |         Set15          | Epoch |
 | :------------: | :--------------------: | :---: |
 | pytorch RCAN++ | PSNR:28.98 SSIM:0.7901 | 1000  |
-| Paddle RCAN++  | PSNR:26.74 SSIM:0.7716 |  105  |
+| Paddle RCAN++  | PSNR:26.78 SSIM:0.7713 |  190  |
 
 ### Visiual outcome
+
+<center class="half">
+  <img src="figs/baboon_LRBI_x4_x4_SR.png"  width="200px" height="200px"/>
+  <img src="figs/barbara_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/bridge_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/coastguard_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/comic_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/face_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/flowers_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/foreman_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/lenna_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/man_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/monarch_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/pepper_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/ppt3_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+  <img src="figs/zebra_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
+<center />
 
