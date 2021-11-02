@@ -1,0 +1,5 @@
+[2021/11/02 08:14:22] root INFO: psnr: 
+[2021/11/02 08:14:22] root INFO: 	mean diff: check passed: False, value: 2.1999988555908203
+[2021/11/02 08:14:22] root INFO: ssim: 
+[2021/11/02 08:14:22] root INFO: 	mean diff: check passed: False, value: 0.018799960613250732
+[2021/11/02 08:14:22] root INFO: diff check failed
