@@ -42,7 +42,7 @@ The architecture of our proposed residual channel attention network (RCAN).
 
 ### Begin to train
 
-1. Download the initialized model and place them in '/RCAN_TrainCode/model'.
+1. [Download the initialized model with code `1p89`](https://pan.baidu.com/s/1ThXJKouEXiGn0SBVWODm0w) and place them in '/RCAN_TrainCode/model'.
 
 2. Cd to 'RCAN_TrainCode/code', run the following scripts to train models.
 
@@ -58,14 +58,14 @@ python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblo
 
 ### Quick start
 
-1. Download [models of ours with code: `wagn`](https://pan.baidu.com/s/17FgLv_fKR2x8Rpf2IXy41w)  and place them in '/RCAN_TrainCode/model'.
+1. Download [models of ours with code: `3d66`]( https://pan.baidu.com/s/1GJGHWdeiTKhathBGtctTuw)  and place them in '/RCAN_TrainCode/model'
 
 2. Cd to '/RCAN_TrainCode/code', run the following scripts.
 
 ​    **You can use scripts in file 'TestRCAN_scripts' to produce results for our paper.**
 
 ```
-python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model/model_190.pdparams
+python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model/model_225.pdparams
 ```
 
 
@@ -87,7 +87,7 @@ python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_r
 |     method     |         Set15          | Epoch |
 | :------------: | :--------------------: | :---: |
 | pytorch RCAN++ | PSNR:28.98 SSIM:0.7901 | 1000  |
-| Paddle RCAN++  | PSNR:26.78 SSIM:0.7713 |  190  |
+| Paddle RCAN++  | PSNR:26.82 SSIM:0.7723 |  225  |
 
 ### Visiual outcome
 
