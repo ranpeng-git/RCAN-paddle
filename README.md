@@ -58,14 +58,14 @@ python main.py --model RCAN --save RCAN_X4 --scale 4 --n_resgroups 10 --n_resblo
 
 ### Quick start
 
-1. Download [models of ours with code: `3d66`]( https://pan.baidu.com/s/1GJGHWdeiTKhathBGtctTuw)  and place them in '/RCAN_TrainCode/model'
+1. Download [models of ours with code: `pevw`]( https://pan.baidu.com/s/1wkTlSE7HklOyu7SMX5ZOuw)  and place them in '/RCAN_TrainCode/model'
 
 2. Cd to '/RCAN_TrainCode/code', run the following scripts.
 
 ​    **You can use scripts in file 'TestRCAN_scripts' to produce results for our paper.**
 
 ```
-python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model/model_225.pdparams
+python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_resblocks 20 --n_feats 64  --test_only --save_results --chop --self_ensemble --save 'RCAN_test' --testpath  --testset  --pre_train model/model_best.pdparams
 ```
 
 
@@ -87,7 +87,7 @@ python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_r
 |     method     |         Set15          | Epoch |
 | :------------: | :--------------------: | :---: |
 | pytorch RCAN++ | PSNR:28.98 SSIM:0.7901 | 1000  |
-| Paddle RCAN++  | PSNR:26.82 SSIM:0.7723 |  225  |
+| Paddle RCAN++  | PSNR:28.96 SSIM:0.7901 | 1000  |
 
 ### Visiual outcome
 
@@ -107,4 +107,3 @@ python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_r
   <img src="figs/ppt3_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
   <img src="figs/zebra_LRBI_x4_x4_SR.png" width="200px" height="200px"/>
 <center />
-
