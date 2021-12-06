@@ -76,7 +76,7 @@ python main.py --data_test MyImage --scale 4 --model RCAN --n_resgroups 10 --n_r
 2. Run 'Prepare_TestData_HR_LR.m' in Matlab to generate HR/LR images with different degradation models.
 3. Conduct image SR. See **Quick start**.
 4. Evaluate the results.
-5. Run 'Evaluate_PSNR_SSIM.m' to obtain PSNR/SSIM values for paper. Or using `/RCAN_TrainCode/metric.py` to obtain PSNR/SSIM.
+5. Run 'Evaluate_PSNR_SSIM.m' to obtain PSNR/SSIM values for paper. 
 
 
 
