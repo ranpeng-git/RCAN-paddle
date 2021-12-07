@@ -42,8 +42,7 @@ The architecture of our proposed residual channel attention network (RCAN).
 
 ### Begin to train
 
-1. [Download the initialized model with code `1p89`](https://pan.baidu.com/s/1ThXJKouEXiGn0SBVWODm0w) and place them in '/RCAN_TrainCode/model'.
-
+1. [Download the initialized model with code `1p89`](https://pan.baidu.com/s/1ThXJKouEXiGn0SBVWODm0w) and place them in '/RCAN_TrainCode/model'. Part of our training process can be seen [here](figs/RCAN.log).
 2. Cd to 'RCAN_TrainCode/code', run the following scripts to train models.
 
 **You can use scripts in file 'TrainRCAN_scripts' to train models for our paper.**
